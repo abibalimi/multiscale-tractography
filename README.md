@@ -72,7 +72,7 @@ Learn contrastive representations from augmented streamline views.
 ## Repository Structure
 
 ```text
-linc_multiscale_tractography/
+multiscale_tractography/
 
 ├── data/
 │   ├── synthetic_streamlines.py
@@ -172,7 +172,7 @@ Clone repository:
 
 ```bash
 git clone <repo_url>
-cd linc_multiscale_tractography
+cd multiscale_tractography
 ```
 
 Create environment:
