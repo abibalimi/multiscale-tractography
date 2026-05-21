@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 
 
-class StreamlineEncoder(nn.Module):
+class StreamlineEncoderGRU(nn.Module):
 
     def __init__(self, input_dim=3, hidden_dim=128, latent_dim=128, num_layers=2):
         super().__init__()
@@ -36,7 +36,7 @@ class StreamlineEncoder(nn.Module):
         return z
 
 
-class StreamlineDecoder(nn.Module):
+class StreamlineDecoderGRU(nn.Module):
 
     def __init__(self, latent_dim=128, hidden_dim=128, output_dim=3, num_layers=2, seq_len=64):
         super().__init__()
@@ -86,14 +86,14 @@ class StreamlineAutoencoder(nn.Module):
     def __init__(self, input_dim=3, hidden_dim=128, latent_dim=128, num_layers=2, seq_len=64):
         super().__init__()
 
-        self.encoder = StreamlineEncoder(
+        self.encoder = StreamlineEncoderGRU(
             input_dim=input_dim,
             hidden_dim=hidden_dim,
             latent_dim=latent_dim,
             num_layers=num_layers
         )
 
-        self.decoder = StreamlineDecoder(
+        self.decoder = StreamlineDecoderGRU(
             latent_dim=latent_dim,
             hidden_dim=hidden_dim,
             output_dim=input_dim,
