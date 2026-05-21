@@ -61,6 +61,32 @@ def plot_streamlines(streamlines, title):
     plt.show()    
     
     
+def crossing_sanitycheck(dataset, labels, embedding):
+    """
+    Sanity check: visualize crossing fibers in latent space
+    """
+    crossing_idx = labels == 3
+    crossing_embedding = embedding[crossing_idx]
+    
+    all_streamlines = []
+    for i in range(len(dataset)):
+        streamline, _ = dataset[i]
+        all_streamlines.append(streamline.numpy())
+
+    all_streamlines = np.array(all_streamlines)
+    crossing_streamlines = (all_streamlines[crossing_idx])
+    
+    # clustering in latent space to separate the two crossing bundles
+    kmeans = KMeans(n_clusters=2, random_state=42)
+    crossing_clusters = (kmeans.fit_predict(crossing_embedding))
+
+    cluster_0 = (crossing_streamlines[crossing_clusters == 0])
+    cluster_1 = (crossing_streamlines[crossing_clusters == 1])
+
+    plot_streamlines(cluster_0[:10], "Crossing Cluster A")
+    plot_streamlines(cluster_1[:10], "Crossing Cluster B")
+    
+        
 def main():
 
     checkpoint_path = (
@@ -105,6 +131,9 @@ def main():
     embedding = reducer.fit_transform(
         latent_vectors
     )
+    
+    # Sanity check: visualize crossing fibers in latent space
+    crossing_sanitycheck(dataset, labels, embedding)
     
     tract_names = [
         "Straight",
