@@ -6,7 +6,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from synthetic_streamlines import SyntheticStreamlineGenerator
 
-if __name__ == "__main__":
+
+def main():
     generator = SyntheticStreamlineGenerator()
 
     fig = plt.figure(figsize=(12, 8))
@@ -32,3 +33,7 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
+    
+    
+if __name__ == "__main__":
+    main()
