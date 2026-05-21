@@ -11,7 +11,7 @@ class SyntheticStreamlineGenerator:
     Generate biologically-inspired synthetic tractography streamlines.
     """
 
-    def __init__(self, num_points=64, noise_std=0, seed=42):
+    def __init__(self, num_points=64, noise_std=0.01, seed=42):
         self.num_points = num_points
         self.noise_std = noise_std
         np.random.seed(seed)
@@ -82,7 +82,7 @@ class SyntheticStreamlineGenerator:
             z = np.zeros_like(t)
         else:
             x = t
-            y = -t +1 # crossing at coordonate (0.5, 0.5, 0)
+            y = -t #+1 # crossing at coordonate (0.5, 0.5, 0)
             z = np.zeros_like(t)
 
         streamline = np.stack([x, y, z], axis=1)
@@ -110,9 +110,9 @@ class SyntheticStreamlineGenerator:
 
 class SyntheticTractographyDataset(Dataset):
 
-    def __init__(self, n_samples=5000, num_points=64):
+    def __init__(self, n_samples=5000, num_points=64, noise_std=0.01):
         self.n_samples = n_samples
-        self.generator = SyntheticStreamlineGenerator(num_points=num_points)
+        self.generator = SyntheticStreamlineGenerator(num_points=num_points, noise_std=noise_std)
 
         self.data = []
         self.labels = []
