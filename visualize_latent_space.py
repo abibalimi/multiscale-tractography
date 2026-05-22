@@ -91,7 +91,7 @@ def main():
 
     checkpoint_path = (
         "lightning_logs/"
-        "version_4/"
+        "version_6/"
         "checkpoints/"
         "epoch=9-step=1250.ckpt"
     )
@@ -133,7 +133,7 @@ def main():
     )
     
     # Sanity check: visualize crossing fibers in latent space
-    crossing_sanitycheck(dataset, labels, embedding)
+    #crossing_sanitycheck(dataset, labels, embedding)
     
     tract_names = [
         "Straight",
@@ -158,7 +158,7 @@ def main():
     plt.legend()
 
     plt.title(
-        "Latent Space of "
+        "CNN Latent Space of "
         "Synthetic Streamlines"
     )
 

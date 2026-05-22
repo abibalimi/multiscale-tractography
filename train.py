@@ -17,6 +17,7 @@ def parse_args():
     parser.add_argument("--epochs", type=int, default=10, help="Number of training epochs")
     parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate")
     parser.add_argument("--latent-dim", type=int, default=128, help="Latent dimension")
+    parser.add_argument("--encoder-type", type=str, default="gru", choices=["gru", "cnn"], help="Type of encoder architecture")
     parser.add_argument("--hidden-dim", type=int, default=128, help="GRU hidden dimension")
     parser.add_argument("--num-layers", type=int, default=2, help="Number of GRU layers")
     parser.add_argument("--seq-len", type=int, default=64, help="Number of streamline points")
@@ -60,7 +61,8 @@ def main():
         lr=args.lr,
         hidden_dim=args.hidden_dim,
         latent_dim=args.latent_dim,
-        seq_len=args.seq_len
+        seq_len=args.seq_len,
+        encoder_type=args.encoder_type
     )
 
     # Trainer
