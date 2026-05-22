@@ -82,7 +82,7 @@ class SyntheticStreamlineGenerator:
             z = np.zeros_like(t)
         else:
             x = t
-            y = -t #+1 # crossing at coordonate (0.5, 0.5, 0)
+            y = -t +1 # crossing at coordonate (0.5, 0.5, 0)
             z = np.zeros_like(t)
 
         streamline = np.stack([x, y, z], axis=1)
