@@ -9,7 +9,7 @@ from models.autoencoder import StreamlineAutoencoder
 
 class TractographyLightningModule(L.LightningModule):
 
-    def __init__(self, lr=1e-3, hidden_dim=128, latent_dim=128, seq_len=64):
+    def __init__(self, lr=1e-3, hidden_dim=128, latent_dim=128, seq_len=64, encoder_type="gru"):
         super().__init__()
 
         self.save_hyperparameters()
@@ -17,7 +17,8 @@ class TractographyLightningModule(L.LightningModule):
         self.model = StreamlineAutoencoder(
             hidden_dim=hidden_dim,
             latent_dim=latent_dim,
-            seq_len=seq_len
+            seq_len=seq_len,
+            encoder_type=encoder_type
         )
 
     def forward(self, x):
