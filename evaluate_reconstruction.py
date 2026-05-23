@@ -43,7 +43,7 @@ def plot_reconstructions(originals, reconstructions, n_examples=8):
         ax.set_yticks([])
         ax.legend()
     
-    fig.suptitle("Original vs Reconstructed Streamlines (2D Projection)")
+    fig.suptitle("Original vs 1D-CNN-Reconstructed Streamlines (2D Projection)")
     plt.tight_layout()
     plt.show()
 
@@ -71,7 +71,7 @@ def main():
     device = ("mps" if torch.backends.mps.is_available() else "cpu")
     
     # load checkpoint
-    checkpoint_path = "lightning_logs/version_5/checkpoints/epoch=9-step=1250.ckpt"
+    checkpoint_path = "lightning_logs/version_6/checkpoints/epoch=9-step=1250.ckpt"
     model = TractographyLightningModule.load_from_checkpoint(checkpoint_path)
     model.eval()
     model.to(device)
