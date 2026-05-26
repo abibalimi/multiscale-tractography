@@ -1,250 +1,67 @@
-# Multi-Scale White Matter Representation Learning
+# Multiscale Tractography Representation Learning
 
-PyTorch Lightning prototype for learning latent representations of white matter tractography across scales.
+A PyTorch Lightning prototype for learning latent representations of white matter tractography across scales.
 
-This project explores **self-supervised representation learning for white matter streamlines**, inspired by tractography, diffusion MRI (dMRI), and 3D Polarized Light Imaging (3D-PLI). The long-term objective is to learn biologically meaningful latent spaces capable of capturing white matter organization across multiple spatial scales.
+## Overview
 
----
+This project explores representation learning approaches for streamline-based white matter tractography using synthetic tractography data. The long-term goal is to investigate learning-based methods for understanding white matter organization across scales and bridging diffusion MRI (dMRI) with higher-resolution imaging modalities such as Three-Dimensional Polarized Light Imaging (3D-PLI).
 
-## Motivation
+The current prototype focuses on:
 
-Diffusion MRI tractography provides a macro-scale representation of white matter pathways, while techniques such as **3D-PLI** reveal microstructural fiber organization at much higher resolution.
+- Learning latent representations of streamline geometries
+- Comparing recurrent and convolutional inductive biases
+- Visualizing tractography organization in latent space
 
-A central challenge in neuroimaging is learning representations that remain meaningful **across scales**.
+## Current Approach
 
-This project investigates whether latent representations can be learned from streamline geometries in a self-supervised manner using:
+Synthetic streamlines are generated using parametric curve models representing simplified tractography geometries:
 
-- sequence autoencoders
-- multi-scale consistency learning
-- contrastive representation learning (SimCLR-inspired)
+- Straight streamlines
+- Curved streamlines
+- Fanning configurations
+- Crossing configurations
 
-The long-term vision is to bridge:
+Autoencoder-based representation learning is implemented using:
 
-```text
-microstructure (3D-PLI)
-        ↕
- mesostructure
-        ↕
-macro-scale tractography (dMRI)
-```
+- **GRU encoder**
+- **1D-CNN encoder**
 
----
+Latent representations are visualized using **UMAP** to investigate the organization of streamline geometries.
 
-## Research Question
+## Preliminary Findings
 
-Can we learn **scale-aware latent representations of white matter organization** from streamline geometry alone?
+Initial experiments suggest that both GRU and CNN encoders learn meaningful geometric representations of streamlines. Latent spaces consistently organize according to streamline geometry (e.g., straight, curved, fanning, crossing patterns).
 
-More specifically:
+Reconstruction analysis shows high-fidelity streamline reconstruction for synthetic tractography data. Visual inspection indicates that reconstructed streamlines closely match original trajectories, suggesting that the current prototype primarily captures streamline-level geometric information rather than higher-order tract semantics.
 
-1. Can streamline autoencoders learn meaningful geometric embeddings?
-2. Can representations remain stable across streamline resolutions?
-3. Can self-supervised contrastive learning improve anatomical consistency?
+These observations motivate future evaluation on more realistic tractography phantoms (e.g., FiberCup) and contrastive/self-supervised objectives.
 
----
+## Next Steps
 
-## Current Prototype Scope
+- Evaluate on more realistic tractography phantoms (e.g., FiberCup)
+- Explore contrastive/self-supervised representation learning
+- Extend toward real dMRI and 3D-PLI tractography data
+- Investigate multiscale and cross-modal tractography representations
 
-This repository currently focuses on an **M1-friendly proof of concept**.
+## Tech Stack
 
-### Phase 1 — Synthetic tractography
-
-Generate biologically inspired synthetic streamlines:
-
-- Straight bundles (corticospinal-like)
-- Curved bundles (association fibers)
-- Fanning bundles (corona radiata-like)
-- Crossing fibers
-
-### Phase 2 — Sequence autoencoder
-
-Train a lightweight **GRU-based autoencoder** to learn latent streamline embeddings.
-
-### Phase 3 — Multi-scale representation learning
-
-Encourage latent consistency across streamline resolutions.
-
-### Phase 4 — SimCLR extension (planned)
-
-Learn contrastive representations from augmented streamline views.
-
----
+- PyTorch
+- PyTorch Lightning
+- UMAP
+- NumPy
+- Matplotlib
 
 ## Repository Structure
 
 ```text
-multiscale_tractography/
-
-├── data/
-│   ├── synthetic_streamlines.py
-│   ├── augmentations.py
-│
-├── models/
-│   ├── autoencoder.py
-│   ├── simclr_head.py
-│
-├── lightning/
-│   ├── tractography_module.py
-│
-├── visualize_streamlines.py
-├── train.py
-├── configs.py
-└── README.md
+data/                  # synthetic streamline generation
+models/                # GRU/CNN autoencoders
+lightning_modules/     # Lightning training module
+train.py               # training entry point
+visualize_latent_space.py
+evaluate_reconstruction.py
 ```
 
----
+## Motivation
 
-## Method Overview
-
-Each streamline is represented as a sequence of 3D coordinates:
-
-```text
-[(x₁, y₁, z₁), ..., (xₙ, yₙ, zₙ)]
-```
-
-where:
-
-- `n = 64` sampled points
-- coordinates represent streamline geometry
-
-A recurrent encoder maps streamlines into a latent representation:
-
-```text
-streamline → encoder → latent vector z
-```
-
-A decoder reconstructs streamline geometry:
-
-```text
-z → decoder → reconstructed streamline
-```
-
----
-
-## Synthetic Tractography
-
-Before using real dMRI tractography, we validate the learning framework on controlled synthetic geometries.
-
-The synthetic streamlines mimic common white matter configurations:
-
-| Bundle Type | Biological Inspiration |
-|-------------|-------------------------|
-| Straight | Corticospinal tract |
-| Curved | Arcuate fasciculus |
-| Fan | Corona radiata |
-| Crossing | Centrum semiovale |
-
-This allows controlled experiments and interpretable latent evaluation.
-
----
-
-## Training Objective
-
-### Reconstruction objective
-
-The first prototype optimizes streamline reconstruction:
-
-L = ||s - ŝ||²
-
-where:
-
-- `s` = input streamline
-- `ŝ` = reconstructed streamline
-
-### Multi-scale consistency (planned)
-
-Representations of the same streamline at different resolutions should remain close in latent space.
-
-### Contrastive learning (planned)
-
-Positive pairs:
-
-- augmented versions of same streamline
-
-Negative pairs:
-
-- unrelated streamlines
-
----
-
-## Installation
-
-Clone repository:
-
-```bash
-git clone <repo_url>
-cd multiscale_tractography
-```
-
-Create environment:
-
-```bash
-python -m venv venv
-source venv/bin/activate
-```
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Run Experiments
-
-### Visualize synthetic streamlines
-
-```bash
-python visualize_streamlines.py
-```
-
-### Train autoencoder
-
-```bash
-python train.py
-```
-
----
-
-## Planned Evaluation
-
-Latent representations will be evaluated using:
-
-- t-SNE
-- UMAP
-- clustering behavior
-- reconstruction fidelity
-- robustness across scales
-
-A successful representation should naturally organize streamline families in latent space.
-
----
-
-## Future Directions
-
-- Real dMRI tractography (HCP)
-- Cross-scale dMRI ↔ 3D-PLI representation learning
-- SimCLR-style self-supervision
-- Transformer encoders for streamline modeling
-- Anatomical priors from white matter connectivity graphs
-- Domain adaptation across acquisition modalities
-
----
-
-## Why This Matters
-
-This prototype explores a practical path toward **multi-scale white matter representation learning**, combining ideas from:
-
-- diffusion MRI
-- tractography
-- self-supervised learning
-- geometric representation learning
-- computational neuroimaging
-
-The broader goal is to improve how structural brain organization is modeled across spatial scales.
-
----
-
-## Citation
-
-Work in progress.
+This prototype was developed as part of an independent research effort at the intersection of neuroimaging, diffusion MRI, tractography, and representation learning.
