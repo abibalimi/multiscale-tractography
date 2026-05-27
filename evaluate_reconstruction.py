@@ -46,23 +46,6 @@ def plot_reconstructions(originals, reconstructions, n_examples=8):
     fig.suptitle("Original vs 1D-CNN-Reconstructed Streamlines (2D Projection)")
     plt.tight_layout()
     plt.show()
-
-
-def plot_reconstructions_5(original, reconstructed, num_samples=5):
-    """
-    Plot original vs reconstructed streamlines for a few samples.
-    """
-    fig = plt.figure(figsize=(12, 6))
-    
-    for i in range(num_samples):
-        ax = fig.add_subplot(1, num_samples, i + 1, projection='3d')
-        ax.plot(original[i][:, 0], original[i][:, 1], original[i][:, 2], label='Original', color='blue')
-        ax.plot(reconstructed[i][:, 0], reconstructed[i][:, 1], reconstructed[i][:, 2], label='Reconstructed', color='red', linestyle='dashed')
-        ax.set_title(f'Sample {i + 1}')
-        ax.legend()
-    
-    plt.tight_layout()
-    plt.show()
     
 
 def main():
